@@ -16,7 +16,8 @@ RUN pip install --requirement=/requirements.txt
 
 FROM nvidia/cuda:10.0-base
 
-LABEL maintainer="hyeon0145@gmail.com"
+LABEL maintainer="hyeon0145@gmail.com" \
+      org.opencontainers.image.source="https://github.com/jonghwanhyeon/gpugpu"
 ENV LANG=C.UTF-8
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

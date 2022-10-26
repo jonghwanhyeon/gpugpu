@@ -10,6 +10,7 @@ To run it:
 
     $ docker run \
           --rm \
+          --gpus=all \
           --pid=host \
           --volume /var/run/docker.sock:/tmp/docker.sock:ro \
           jonghwanhyeon/gpugpu

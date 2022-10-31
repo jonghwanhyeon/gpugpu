@@ -1,5 +1,5 @@
 from .gpus import all_gpus
-from .docker_utils import find_container_by_pid
+from .utils import find_container_by_pid
 
 def get_friendly_name_of_process(process):
     container = find_container_by_pid(process.pid)
@@ -24,17 +24,17 @@ def show_status(gpu):
     processes = list(gpu.processes)
     if processes:
         parts += [
-            '|', 
+            '|',
             *(
                 '{}({} MB)'.format(
-                    get_friendly_name_of_process(p), 
-                    colored('yellow', int(p.used_memory / 1024 / 1024))) 
+                    get_friendly_name_of_process(p),
+                    colored('yellow', int(p.used_memory / 1024 / 1024)))
                 for p in processes
             )
         ]
 
     print(*parts, sep=' ')
-    
+
 with all_gpus() as gpus:
     for gpu in gpus:
         show_status(gpu)

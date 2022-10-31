@@ -3,8 +3,9 @@ from __future__ import annotations
 from contextlib import contextmanager
 from typing import ContextManager, List, NamedTuple
 
-import psutil
 from pynvml import *
+
+from gpugpu.utils import find_user_by_pid
 
 
 class GPU:
@@ -61,7 +62,7 @@ class GPU:
 
             yield GPU.Process(
                 pid=p.pid,
-                user=psutil.Process(p.pid).username(),
+                user=find_user_by_pid(p.pid),
                 name=name,
                 used_memory=p.usedGpuMemory,
             )

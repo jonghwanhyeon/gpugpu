@@ -28,3 +28,11 @@ def find_user_by_pid(pid: int) -> Optional[str]:
         return psutil.Process(pid).username()
     except psutil.NoSuchProcess:
         return None
+
+
+def get_friendly_name_of_process(process):
+    container = find_container_by_pid(process.pid)
+    if container:
+        return container.name
+    else:
+        return process.uer if process.user is not None else "Unknown"

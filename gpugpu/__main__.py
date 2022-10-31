@@ -1,13 +1,5 @@
 from gpugpu.gpus import all_gpus
-from gpugpu.utils import find_container_by_pid
-
-
-def get_friendly_name_of_process(process):
-    container = find_container_by_pid(process.pid)
-    if container:
-        return container.name
-    else:
-        return process.uer if process.user is not None else "Unknown"
+from gpugpu.utils import get_friendly_name_of_process
 
 
 def colored(name, text):

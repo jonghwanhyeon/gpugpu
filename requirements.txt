@@ -1,5 +1,4 @@
+colored
 docker
 nvidia-ml-py3
 psutil
-colored
-

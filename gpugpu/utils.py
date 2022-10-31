@@ -1,10 +1,13 @@
+import os
 from itertools import chain
 from typing import Optional, Set
 
 import docker
+import psutil
 from docker.models.containers import Container
 
-docker_client = docker.DockerClient(base_url="unix://tmp/docker.sock")
+docker_host = os.environ.get("DOCKER_HOST", "unix://var/run/docker.sock")
+docker_client = docker.DockerClient(base_url=docker_host)
 
 
 def get_pids(container: Container) -> Set[int]:
@@ -18,3 +21,10 @@ def find_container_by_pid(pid: int) -> Optional[Container]:
         if pid in get_pids(container):
             return container
     return None
+
+
+def find_user_by_pid(pid: int) -> Optional[str]:
+    try:
+        return psutil.Process(pid).username()
+    except psutil.NoSuchProcess:
+        return None

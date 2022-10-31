@@ -1,5 +1,6 @@
-from .gpus import all_gpus
-from .utils import find_container_by_pid
+from gpugpu.gpus import all_gpus
+from gpugpu.utils import find_container_by_pid
+
 
 def get_friendly_name_of_process(process):
     container = find_container_by_pid(process.pid)
@@ -8,33 +9,45 @@ def get_friendly_name_of_process(process):
     else:
         return process.user
 
+
 def colored(name, text):
     from colored import fg, attr
-    return fg(name) + str(text) + attr('reset')
+
+    return fg(name) + str(text) + attr("reset")
+
 
 def show_status(gpu):
     parts = [
-        colored('blue', '[{}]'.format(gpu.id)), gpu.name, '|',
-        colored('red', '{} C'.format(gpu.temperature)), '|',
-        colored('green', '{} %'.format(gpu.utilization)), '|',
-        colored('yellow', '{:.0f}'.format(gpu.memory.used / 1024 / 1024)), '/',
-        colored('yellow', '{:.0f}'.format(gpu.memory.total / 1024 / 1024)), 'MB'
+        colored("blue", "[{}]".format(gpu.id)),
+        gpu.name,
+        "|",
+        colored("red", "{} C".format(gpu.temperature)),
+        "|",
+        colored("green", "{} %".format(gpu.utilization)),
+        "|",
+        colored("yellow", "{:.0f}".format(gpu.memory.used / 1024 / 1024)),
+        "/",
+        colored("yellow", "{:.0f}".format(gpu.memory.total / 1024 / 1024)),
+        "MB",
     ]
 
     processes = list(gpu.processes)
     if processes:
         parts += [
-            '|',
+            "|",
             *(
-                '{}({} MB)'.format(
+                "{}({} MB)".format(
                     get_friendly_name_of_process(p),
-                    colored('yellow', int(p.used_memory / 1024 / 1024)))
+                    colored("yellow", int(p.used_memory / 1024 / 1024)),
+                )
                 for p in processes
-            )
+            ),
         ]
 
-    print(*parts, sep=' ')
+    print(*parts, sep=" ")
 
-with all_gpus() as gpus:
-    for gpu in gpus:
-        show_status(gpu)
+
+if __name__ == "__main__":
+    with all_gpus() as gpus:
+        for gpu in gpus:
+            show_status(gpu)

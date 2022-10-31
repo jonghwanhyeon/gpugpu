@@ -1,43 +1,58 @@
-import psutil
+from __future__ import annotations
 
 from contextlib import contextmanager
-from collections import namedtuple
+from typing import ContextManager, List, NamedTuple
+
+import psutil
 from pynvml import *
 
-class GPU:
-    Memory = namedtuple('Memory', ['total', 'used', 'free'])
-    Power = namedtuple('Power', ['usage', 'limit'])
-    Process = namedtuple('Process', ['pid', 'user', 'name', 'used_memory'])
 
-    def __init__(self, id):
+class GPU:
+    class Memory(NamedTuple):
+        total: int
+        used: int
+        free: int
+
+    class Power(NamedTuple):
+        usage: float
+        limit: float
+
+    class Process(NamedTuple):
+        pid: int
+        user: str
+        name: str
+        used_memory: int
+
+    def __init__(self, id: int):
         self.id = id
         self.handle = nvmlDeviceGetHandleByIndex(id)
 
     @property
-    def name(self):
+    def name(self) -> str:
         return nvmlDeviceGetName(self.handle).decode()
 
     @property
-    def memory(self):
+    def memory(self) -> GPU.Memory:
         m = nvmlDeviceGetMemoryInfo(self.handle)
         return GPU.Memory(total=m.total, used=m.used, free=m.free)
 
     @property
-    def utilization(self):
+    def utilization(self) -> int:
         return nvmlDeviceGetUtilizationRates(self.handle).gpu
 
     @property
-    def temperature(self):
+    def temperature(self) -> int:
         return nvmlDeviceGetTemperature(self.handle, NVML_TEMPERATURE_GPU)
 
     @property
-    def power(self):
+    def power(self) -> GPU.Power:
         return GPU.Power(
             usage=nvmlDeviceGetPowerUsage(self.handle) / 1000,
-            limit=nvmlDeviceGetPowerManagementLimit(self.handle) / 1000)
+            limit=nvmlDeviceGetPowerManagementLimit(self.handle) / 1000,
+        )
 
     @property
-    def processes(self):
+    def processes(self) -> GPU.Process:
         for p in nvmlDeviceGetComputeRunningProcesses(self.handle):
             try:
                 name = nvmlSystemGetProcessName(p.pid).decode()
@@ -48,10 +63,12 @@ class GPU:
                 pid=p.pid,
                 user=psutil.Process(p.pid).username(),
                 name=name,
-                used_memory=p.usedGpuMemory)
+                used_memory=p.usedGpuMemory,
+            )
+
 
 @contextmanager
-def all_gpus():
+def all_gpus() -> ContextManager[List[GPU]]:
     nvmlInit()
     yield [GPU(id) for id in range(nvmlDeviceGetCount())]
     nvmlShutdown()

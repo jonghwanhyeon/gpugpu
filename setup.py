@@ -5,7 +5,7 @@ with open("README.md", "r") as input_file:
 
 setup(
     name="gpugpu",
-    version="1.0.0",
+    version="1.0.1",
     description="gpugpu shows current statistics of GPUs and memory usage by running containers",
     long_description=long_description,
     long_description_content_type="text/markdown",

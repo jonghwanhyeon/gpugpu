@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.0-base AS builder
+FROM nvidia/cuda:11.3.1-base-ubuntu20.04 AS builder
 
 ENV LANG=C.UTF-8
 RUN apt-get update && apt-get install -y \
@@ -14,7 +14,7 @@ COPY requirements.txt /requirements.txt
 RUN pip install --requirement=/requirements.txt
 
 
-FROM nvidia/cuda:10.0-base
+FROM nvidia/cuda:11.3.1-base-ubuntu20.04
 
 LABEL maintainer="hyeon0145@gmail.com" \
       org.opencontainers.image.source="https://github.com/jonghwanhyeon/gpugpu"

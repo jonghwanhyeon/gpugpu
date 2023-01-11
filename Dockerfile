@@ -16,7 +16,7 @@ RUN pip install --requirement=/requirements.txt
 
 FROM nvidia/cuda:11.3.1-base-ubuntu20.04
 
-LABEL maintainer="hyeon0145@gmail.com" \
+LABEL maintainer="jonghwanhyeon93@gmail.com" \
       org.opencontainers.image.source="https://github.com/jonghwanhyeon/gpugpu"
 ENV LANG=C.UTF-8
 

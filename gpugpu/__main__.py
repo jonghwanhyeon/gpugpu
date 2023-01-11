@@ -3,7 +3,7 @@ from gpugpu.utils import get_friendly_name_of_process
 
 
 def colored(name, text):
-    from colored import fg, attr
+    from colored import attr, fg
 
     return fg(name) + str(text) + attr("reset")
 

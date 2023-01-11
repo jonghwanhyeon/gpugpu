@@ -5,7 +5,7 @@ with open("README.md", "r") as input_file:
 
 setup(
     name="gpugpu",
-    version="1.0.1",
+    version="1.0.2",
     description="gpugpu shows current statistics of GPUs and memory usage by running containers",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,7 +19,6 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3 :: Only",
-        "Topic :: Home Automation",
     ],
     keywords=["gpu", "usage", "docker", "container"],
     packages=find_packages(),

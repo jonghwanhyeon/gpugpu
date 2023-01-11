@@ -33,4 +33,4 @@ def get_friendly_name_of_process(process):
     if container:
         return container.name
     else:
-        return process.uer if process.user is not None else "Unknown"
+        return process.user if process.user is not None else "Unknown"
